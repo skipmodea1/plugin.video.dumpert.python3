@@ -27,7 +27,10 @@
     <license>GPL-2.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=162635</forum>
     <website>https://dumpert.nl</website>
-    <email></email>
     <source>https://github.com/skipmodea1/plugin.video.dumpert.python3</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
   </extension>
 </addon>
