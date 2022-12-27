@@ -7,11 +7,9 @@
 from future import standard_library
 standard_library.install_aliases()
 from builtins import str
-import os
 import sys
 import urllib.parse
 import xbmc
-import xbmcaddon
 
 from resources.lib.dumpert_const import ADDON, DATE, VERSION, SETTINGS
 
