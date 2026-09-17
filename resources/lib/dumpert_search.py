@@ -11,7 +11,8 @@ from builtins import object
 import sys
 import xbmc
 
-from resources.lib.dumpert_const import LANGUAGE, log, convertToUnicodeString
+from resources.lib.dumpert_const import SEARCH_URL_PART_2, SEARCH_URL_PART_3, INITIAL_PAGE_NUMBER, LANGUAGE, \
+    log, convertToUnicodeString
 
 
 #
@@ -28,8 +29,6 @@ class Main(object):
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        log("ARGV", repr(sys.argv))
-
         # Get search term from user
         keyboard = xbmc.Keyboard('', LANGUAGE(30508))
         keyboard.doModal()
@@ -45,11 +44,11 @@ class Main(object):
 
         sys.argv[2] = convertToUnicodeString(sys.argv[2])
 
-        # Converting URL argument to proper query string like 'https://api-live.dumpert.nl/mobile_api/json/search/fiets/0/'
-        sys.argv[2] = sys.argv[2] + search_term + "/0/"
+        # Converting URL argument to proper query string like "https://post.dumpert.nl/api/v1.0/search/fiets/0/?order=date&media_type=all&app=www.dumpert.nl"
+        sys.argv[2] = sys.argv[2] + search_term + SEARCH_URL_PART_2 + INITIAL_PAGE_NUMBER + SEARCH_URL_PART_3
 
         log("sys.argv[2]", sys.argv[2])
 
-        import dumpert_json as plugin
+        import resources.lib.dumpert_json as plugin
 
         plugin.Main()
