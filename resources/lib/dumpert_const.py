@@ -44,11 +44,12 @@ NSFW_HEADERS = {'X-Dumpert-NSFW': '1'}
 DAY = "day"
 WEEK = "week"
 MONTH = "month"
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36'}
 VIDEO_QUALITY_MOBILE = "mobile"
 VIDEO_QUALITY_TABLET = "tablet"
 VIDEO_QUALITY_720P = "720p"
-DATE = "2026-09-15"
-VERSION = "1.1.14"
+DATE = "2026-10-16"
+VERSION = "1.1.15"
 
 if sys.version_info[0] > 2:
     unicode = str

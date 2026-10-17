@@ -19,7 +19,7 @@ import xbmcplugin
 import json
 
 from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, \
-    SFW_HEADERS, NSFW_HEADERS, DAY, WEEK, MONTH, DAY_TOPPERS_URL_PART_1, DAY_TOPPERS_URL_PART_2, \
+    HEADERS, SFW_HEADERS, NSFW_HEADERS, DAY, WEEK, MONTH, DAY_TOPPERS_URL_PART_1, DAY_TOPPERS_URL_PART_2, \
     WEEK_TOPPERS_URL_PART_1, WEEK_TOPPERS_URL_PART_2, MONTH_TOPPERS_URL_PART_1, \
     MONTH_TOPPERS_URL_PART_2, LATEST_URL_PART_1, LATEST_URL_PART_2, INITIAL_PAGE_NUMBER, \
     VIDEO_QUALITY_MOBILE, VIDEO_QUALITY_TABLET, VIDEO_QUALITY_720P
@@ -189,19 +189,25 @@ class Main(object):
         # Init
         #
         listing = []
-
+        
+        # Combining two dictionaries into one dictionary
         if SETTINGS.getSetting('nsfw') == 'true':
-            response = requests.get(self.video_list_page_url, headers=NSFW_HEADERS)
+            response = requests.get(self.video_list_page_url, headers={**NSFW_HEADERS, **HEADERS})
         else:
-            response = requests.get(self.video_list_page_url, headers=SFW_HEADERS)
+            response = requests.get(self.video_list_page_url, headers={**SFW_HEADERS, **HEADERS})
 
-        log("response", response)
+        # log("response", response)
+        # log("response.status", response.status)
+        # log("response.text", response.text)        
 
-        # response.status
         json_source = response.text
         json_source = convertToUnicodeString(json_source)
         data = json.loads(json_source)
-        if not data['success']:
+        try:
+            data = json.loads(json_source)
+        except json.decoder.JSONDecodeError as e:
+            log("JSONDecodeError", e)
+            log("json_source", json_source)
             xbmcplugin.endOfDirectory(self.plugin_handle)
             return
 
@@ -275,9 +281,11 @@ class Main(object):
                 # log("json file", file)
 
                 list_item = xbmcgui.ListItem(label=title)
-                list_item.setInfo("video",
-                                  {"title": title, "studio": "Dumpert", "mediatype": "video",
-                                   "plot": description, "duration": duration})
+                info = list_item.getVideoInfoTag()
+                info.setMediaType("video")
+                info.setTitle(title)   
+                info.setPlot(description)
+                info.setDuration(duration)                  
                 list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                                   'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
                 list_item.setProperty('IsPlayable', 'true')
